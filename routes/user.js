@@ -4,6 +4,7 @@ import { UserModel, AdminModel, CourseModel, PurchaseModel } from "../database.j
 import bcrypt from "bcrypt";
 const saltRounds=5
 import jwt from 'jsonwebtoken'
+import UserMiddleware from "../middleware/userMid.js";
 
 import dotenv from 'dotenv';
 dotenv.config();      //**** accessing .env file information here 
@@ -149,6 +150,15 @@ UserRouter.post('/signin', async (req,res)=>{
 
     }
  
+})
+
+
+
+
+
+
+UserRouter.get('/allpurchased', UserMiddleware, (req,res)=>{
+    
 })
 
 

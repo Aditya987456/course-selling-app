@@ -69,8 +69,8 @@ export const AdminModel=mongoose.model('Admin', Admincollection)
 //---------------------------##  defining schema for Course's collections  ------------------------------
 
 const Coursecollection=new Schema({
-    title:String,
-    description:String,
+    title:{type:String, required:true, unique:true},
+    description:{type:String, required:true},
     price:Number,
     imageURL:String,
     creatorAdminID:String
