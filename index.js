@@ -28,6 +28,7 @@ import express from 'express';
 import {connectDB, UserModel, AdminModel, CourseModel, PurchaseModel} from './database.js';
 import AdminRouter from './routes/admin.js';
 import UserRouter from './routes/user.js';
+import CourseRouter from './routes/courses.js';
 
 const app=express()
 app.use(express.json())  //$$ parse the incoming json i.e Real object you can work with
@@ -44,15 +45,18 @@ connectDB()
 
 
 
-// ### handling requests for user route.
-
+// ###----------------- handling requests for user route.
 app.use('/user', UserRouter )
 
 
 
-// ### handling requests for admin route.
-
+// ###------------------ handling requests for admin route.
 app.use('/admin', AdminRouter )
+
+
+
+// ###------------------ handling requests for courses route.
+app.use('/course', CourseRouter )
 
 
 

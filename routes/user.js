@@ -85,10 +85,7 @@ UserRouter.post('/signup', async (req,res)=>{
 
 
 
-
-
-
-// -------#####-------------- signin--------------------------
+// ----------------------------------- signin--------------------------------------------
 UserRouter.post('/signin', async (req,res)=>{
 
     try{
@@ -151,6 +148,20 @@ UserRouter.post('/signin', async (req,res)=>{
     }
  
 })
+
+
+
+
+
+
+
+
+UserRouter.get('/purchasing', UserMiddleware, async (req,res)=>{
+    
+    
+})
+
+
 
 
 
