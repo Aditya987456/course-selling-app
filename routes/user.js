@@ -157,9 +157,10 @@ UserRouter.post('/signin', async (req,res)=>{
 
 
 
-UserRouter.get('/purchasing', UserMiddleware, async (req,res)=>{
+UserRouter.post('/purchasing', UserMiddleware, async (req,res)=>{
     try {
         const { CourseToPurchase }=req.body
+
 
     //-- firstly checking is that course available or not.
         const courseAvailable=await CourseModel.find({
@@ -169,6 +170,20 @@ UserRouter.get('/purchasing', UserMiddleware, async (req,res)=>{
         if(courseAvailable.length===0){
             return res.status(400).json({
                 Message:'Sorry sir, this course is not available.'
+            })
+        }
+
+
+    //--checking is course is alredy purchased bu user...
+        const isalreadyhave=await PurchaseModel.find({
+            buyerUserID:req.userID,
+            courseID:CourseToPurchase
+        })
+
+        if(isalreadyhave.length){
+            return res.status(200).json({
+                message:'Sir you have already purchased this course',
+                CourseID:CourseToPurchase
             })
         }
 
@@ -195,8 +210,6 @@ UserRouter.get('/purchasing', UserMiddleware, async (req,res)=>{
         
     }
 })
-
-
 
 
 

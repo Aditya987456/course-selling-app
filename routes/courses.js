@@ -41,10 +41,10 @@ CourseRouter.get('/preview', async (req,res)=>{
 
 //-----get course details by using courseID :NO need of middleware to see specific course details  -------------------------------------
 
-CourseRouter.get('/getdetails',  async (req,res)=>{
+CourseRouter.get('/getdetails/:courseID',  async (req,res)=>{
     try {
 
-        const { courseID }= req.body
+        const  courseID = req.params.courseID
         const specificCourse=await CourseModel.find({
             _id:courseID
         })
