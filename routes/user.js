@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken'
 import UserMiddleware from "../middleware/userMid.js";
 
 import dotenv from 'dotenv';
+
 dotenv.config();      //**** accessing .env file information here 
 const JWT_SECRET=process.env.JWT_SECRET_USER
 
@@ -157,8 +158,42 @@ UserRouter.post('/signin', async (req,res)=>{
 
 
 UserRouter.get('/purchasing', UserMiddleware, async (req,res)=>{
-    
-    
+    try {
+        const { CourseToPurchase }=req.body
+
+    //-- firstly checking is that course available or not.
+        const courseAvailable=await CourseModel.find({
+            _id:CourseToPurchase
+        })
+
+        if(courseAvailable.length===0){
+            return res.status(400).json({
+                Message:'Sorry sir, this course is not available.'
+            })
+        }
+
+
+        const buyerUserID=req.userID
+
+        const purchasedCourse=await PurchaseModel.create({
+            buyerUserID,
+            courseID:CourseToPurchase
+        })
+
+        res.status(200).json({
+            message:'You have successfully purchase the course, whose ID is: ',
+            PurchasedCourseID:CourseToPurchase,
+            purchasingID:purchasedCourse._id
+        })
+
+        
+    } catch (err) {
+        return res.status(400).json({
+            message:'Errorin purchasing course',
+            Error:err
+        })
+        
+    }
 })
 
 
@@ -168,8 +203,34 @@ UserRouter.get('/purchasing', UserMiddleware, async (req,res)=>{
 
 
 
-UserRouter.get('/allpurchased', UserMiddleware, (req,res)=>{
-    
+UserRouter.get('/allpurchased', UserMiddleware, async (req,res)=>{
+    try {
+        const  allPurchasesByUserID =req.userID
+
+        const allpurchases=await PurchaseModel.find({
+            buyerUserID:allPurchasesByUserID
+        })
+
+        if(allpurchases.length===0){
+            return res.status(200).json({
+                message:"You have not purchased and courses. your course bucket is empty",
+                CourseBucket:allpurchases
+            })
+        }
+
+        res.status(200).json({
+            mesaage:'Your all purchased courses are : ',
+            YourPurchasedCourses:allpurchases
+        })
+
+    } catch (err) {
+        res.status(400).json({
+            message:'Error in finding the purchased courses',
+            Error:err
+           
+        })
+        
+    }
 })
 
 

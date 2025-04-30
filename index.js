@@ -31,7 +31,36 @@ import UserRouter from './routes/user.js';
 import CourseRouter from './routes/courses.js';
 
 const app=express()
-app.use(express.json())  //$$ parse the incoming json i.e Real object you can work with
+//app.use(express.json())  //$$ parse the incoming json i.e Real object you can work with and if we use this then
+//we need to pass the body even in the GET method.
+
+//--$$$$ ---this is good as compare to above.
+// app.use(express.json({
+//     strict: true,
+//     verify: (req, res, buf) => {
+//       if (buf.length === 0 && req.method !== 'GET') {
+//         throw new Error('Empty body not allowed');
+//       }
+//     }
+//   }));
+
+//this works above not works?????
+app.use((req, res, next) => {
+    if (req.method === "POST" || req.method === "PUT" || req.method === "PATCH") {
+      express.json({
+        strict: true,
+        verify: (req, res, buf) => {
+          if (buf.length === 0 && req.method !== "GET") {
+            throw new Error("Empty body not allowed");
+          }
+        }
+      })(req, res, next);
+    } else {
+      next();
+    }
+  });
+  
+  
 
 
 
